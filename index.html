@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanteenPay | Gestão Inteligente Escolar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="notification" class="notification">Fatura enviada com sucesso! 📧</div>
+
+    <div class="container">
+        <header>
+            <h1>CanteenPay</h1>
+            <div class="user-info">
+                <span>Terminal: Cantina Principal</span>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Vendas Hoje</h3>
+                <p id="total-vendas-hoje">R$ 0,00</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pendências Mês</h3>
+                <p id="total-pendencias">R$ 1.250,50</p>
+            </div>
+            <div class="stat-card">
+                <h3>Faturas Enviadas</h3>
+                <p>24 (Março)</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <div class="section-title">
+                    <h2>Registrar Consumo</h2>
+                    <span id="active-student-name" style="color: var(--secondary); font-weight: 600;">Selecione um
+                        Aluno</span>
+                </div>
+
+                <div class="student-list" id="student-list">
+                    <!-- Students populated via JS -->
+                </div>
+
+                <div class="product-grid" id="product-grid">
+                    <!-- Products populated via JS -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <h2>Resumo da Compra</h2>
+                </div>
+                <div class="cart-items" id="cart-items">
+                    <p style="color: var(--text-muted); font-style: italic;">Nenhum item selecionado</p>
+                </div>
+                <div class="total-section">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span>Total:</span>
+                        <span id="cart-total" style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">R$
+                            0,00</span>
+                    </div>
+                    <button class="btn btn-primary" id="confirm-purchase">Confirmar Compra</button>
+                    <button class="btn btn-secondary" id="send-invoices">Enviar Faturas do Mês</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <div class="section-title">
+                <h2>Histórico de Registros (Diário/Mensal)</h2>
+            </div>
+            <div class="table-container">
+                <table class="sales-table">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Aluno</th>
+                            <th>Itens</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-history-body">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
