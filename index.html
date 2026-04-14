@@ -1,102 +1,772 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CanteenPay | Gestão Inteligente Escolar</title>
+    <title>Cantina Digital - Sistema de Gestão Escolar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #64748b;
+            --bg-main: #f8fafc;
+            --bg-sidebar: #1e293b;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --text-white: #ffffff;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --debug: #6366f1;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            padding: 0.5rem 1rem;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav li.active a,
+        .sidebar-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-white);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            height: 70px;
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .top-bar h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Forms & Tables */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .table-container {
+            background-color: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Modals */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            width: 500px;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.625rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--text-main);
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Notifications */
+        .notification-area {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+        }
+
+        .notification {
+            background-color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--success);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-header {
+                padding: 1rem;
+            }
+
+            .sidebar-nav ul {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .sidebar-nav li {
+                padding: 0 0.5rem;
+                flex-shrink: 0;
+            }
+
+            .sidebar-nav li a {
+                padding: 0.5rem 1rem;
+                flex-direction: column;
+                gap: 0.25rem;
+                font-size: 0.75rem;
+            }
+
+            .nav-icon {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .top-bar {
+                padding: 0 1rem;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <div id="notification" class="notification">Fatura enviada com sucesso! 📧</div>
-
-    <div class="container">
-        <header>
-            <h1>CanteenPay</h1>
-            <div class="user-info">
-                <span>Terminal: Cantina Principal</span>
-            </div>
-        </header>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Vendas Hoje</h3>
-                <p id="total-vendas-hoje">R$ 0,00</p>
-            </div>
-            <div class="stat-card">
-                <h3>Pendências Mês</h3>
-                <p id="total-pendencias">R$ 1.250,50</p>
-            </div>
-            <div class="stat-card">
-                <h3>Faturas Enviadas</h3>
-                <p>24 (Março)</p>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="card">
-                <div class="section-title">
-                    <h2>Registrar Consumo</h2>
-                    <span id="active-student-name" style="color: var(--secondary); font-weight: 600;">Selecione um
-                        Aluno</span>
-                </div>
-
-                <div class="student-list" id="student-list">
-                    <!-- Students populated via JS -->
-                </div>
-
-                <div class="product-grid" id="product-grid">
-                    <!-- Products populated via JS -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🍎</span>
+                    <h1>Cantina Digital</h1>
                 </div>
             </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-section="dashboard">
+                        <a href="#"><span class="nav-icon">📊</span> Dashboard</a>
+                    </li>
+                    <li data-section="students">
+                        <a href="#"><span class="nav-icon">👥</span> Alunos</a>
+                    </li>
+                    <li data-section="sellers">
+                        <a href="#"><span class="nav-icon">🧑‍🍳</span> Vendedores</a>
+                    </li>
+                    <li data-section="products">
+                        <a href="#"><span class="nav-icon">🥪</span> Produtos</a>
+                    </li>
+                    <li data-section="orders">
+                        <a href="#"><span class="nav-icon">📝</span> Pedidos</a>
+                    </li>
+                    <li data-section="payments">
+                        <a href="#"><span class="nav-icon">💳</span> Pagamentos</a>
+                    </li>
+                    <li data-section="help">
+                        <a href="#"><span class="nav-icon">❓</span> Ajuda</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-            <div class="card">
-                <div class="section-title">
-                    <h2>Resumo da Compra</h2>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="section-title">Dashboard</h2>
+                <div class="user-info">
+                    <span id="current-date"></span>
                 </div>
-                <div class="cart-items" id="cart-items">
-                    <p style="color: var(--text-muted); font-style: italic;">Nenhum item selecionado</p>
-                </div>
-                <div class="total-section">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                        <span>Total:</span>
-                        <span id="cart-total" style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">R$
-                            0,00</span>
-                    </div>
-                    <button class="btn btn-primary" id="confirm-purchase">Confirmar Compra</button>
-                    <button class="btn btn-secondary" id="send-invoices">Enviar Faturas do Mês</button>
-                </div>
-            </div>
-        </div>
+            </header>
 
-        <div class="card" style="margin-top: 2rem;">
-            <div class="section-title">
-                <h2>Histórico de Registros (Diário/Mensal)</h2>
+            <div id="content-area" class="content-area">
+                <!-- Content will be injected here by JS -->
             </div>
-            <div class="table-container">
-                <table class="sales-table">
-                    <thead>
-                        <tr>
-                            <th>Data/Hora</th>
-                            <th>Aluno</th>
-                            <th>Itens</th>
-                            <th>Valor Total</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sales-history-body">
-                        <!-- Populated via JS -->
-                    </tbody>
-                </table>
+        </main>
+    </div>
+
+    <!-- Modals for Forms -->
+    <div id="modal-container" class="modal-container hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Novo Registro</h3>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Dynamic form here -->
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <script>
+        /**
+         * Cantina Digital - Core Logic
+         */
 
+        // --- State Management ---
+        const storage = {
+            getItem: (key) => {
+                try { return localStorage.getItem(key); } catch (e) { return null; }
+            },
+            setItem: (key, value) => {
+                try { localStorage.setItem(key, value); } catch (e) {}
+            }
+        };
+
+        const getInitialState = () => {
+            let students, sellers, products, orders, payments;
+            try {
+                students = JSON.parse(storage.getItem('students'));
+                sellers = JSON.parse(storage.getItem('sellers'));
+                products = JSON.parse(storage.getItem('products'));
+                orders = JSON.parse(storage.getItem('orders'));
+                payments = JSON.parse(storage.getItem('payments'));
+            } catch (e) {}
+
+            if (!students || students.length === 0) {
+                return {
+                    students: [
+                        { id: '1', name: 'João Silva', grade: '5º Ano A', parentName: 'Maria Silva', parentPhone: '(11) 98888-7777', date: new Date().toISOString() },
+                        { id: '2', name: 'Ana Oliveira', grade: '6º Ano C', parentName: 'Pedro Oliveira', parentPhone: '(11) 97777-6666', date: new Date().toISOString() }
+                    ],
+                    sellers: [
+                        { id: '1', name: 'Carlos (Cantina Principal)', phone: '(11) 95555-4444', date: new Date().toISOString() }
+                    ],
+                    products: [
+                        { id: '1', name: 'Salgado Assado', price: 6.50, stock: 50, date: new Date().toISOString() },
+                        { id: '2', name: 'Suco Natural', price: 5.00, stock: 30, date: new Date().toISOString() },
+                        { id: '3', name: 'Fruta da Estação', price: 3.50, stock: 20, date: new Date().toISOString() }
+                    ],
+                    orders: orders || [],
+                    payments: payments || [],
+                    currentSection: 'dashboard'
+                };
+            }
+            return { students, sellers: sellers || [], products: products || [], orders: orders || [], payments: payments || [], currentSection: 'dashboard' };
+        };
+
+        const state = getInitialState();
+        const saveState = () => {
+            storage.setItem('students', JSON.stringify(state.students));
+            storage.setItem('sellers', JSON.stringify(state.sellers));
+            storage.setItem('products', JSON.stringify(state.products));
+            storage.setItem('orders', JSON.stringify(state.orders));
+            storage.setItem('payments', JSON.stringify(state.payments));
+        };
+        if (!storage.getItem('students')) saveState();
+
+        const getEl = (id) => document.getElementById(id);
+
+        window.switchSection = (sectionId) => {
+            state.currentSection = sectionId;
+            document.querySelectorAll('.sidebar-nav li').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === sectionId);
+            });
+            const titles = { dashboard: 'Dashboard', students: 'Gestão de Alunos', sellers: 'Gestão de Vendedores', products: 'Gestão de Produtos', orders: 'Registro de Pedidos', payments: 'Controle de Pagamentos' };
+            const titleEl = getEl('section-title');
+            if (titleEl) titleEl.innerText = titles[sectionId];
+            renderSectionContent(sectionId);
+        };
+
+        window.openModal = (title, bodyHtml) => {
+            getEl('modal-title').innerText = title;
+            getEl('modal-body').innerHTML = bodyHtml;
+            getEl('modal-container').classList.remove('hidden');
+        };
+
+        window.closeModal = () => {
+            getEl('modal-container').classList.add('hidden');
+        };
+
+        const renderSectionContent = (sectionId) => {
+            if (sectionId === 'dashboard') renderDashboard();
+            else if (sectionId === 'help') renderHelp();
+            else renderEntitySection(sectionId);
+        };
+
+        const renderHelp = () => {
+            const contentArea = getEl('content-area');
+            if (!contentArea) return;
+            contentArea.innerHTML = `
+                <div class="help-section" style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 1rem; box-shadow: var(--card-shadow);">
+                    <h2 style="margin-bottom: 1.5rem;">Central de Ajuda</h2>
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Como cadastrar um pedido?</h4>
+                        <p style="color: var(--text-muted);">Vá para a seção de Pedidos, clique em 'Novo Pedido' e preencha os dados solicitados. Certifique-se de que o aluno e o produto já estejam cadastrados.</p>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Como ocorrem os pagamentos?</h4>
+                        <p style="color: var(--text-muted);">Os pagamentos são registrados na seção de Pagamentos. No final do mês, você pode notificar os pais clicando no botão de notificação na tela de Pagamentos.</p>
+                    </div>
+                    <div style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                        <p style="font-size: 0.875rem;">Ainda com dúvidas? Entre em conta com o suporte técnico através do ramal 404.</p>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderDashboard = () => {
+            const totalSales = state.orders.reduce((acc, order) => {
+                const product = state.products.find(p => p.id === order.productId);
+                return acc + (product ? product.price : 0) * (order.quantity || 1);
+            }, 0);
+
+            const contentArea = getEl('content-area');
+            if (!contentArea) return;
+
+            contentArea.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card"><h3>Total de Alunos</h3><p>${state.students.length}</p></div>
+                    <div class="stat-card"><h3>Vendas Totais</h3><p>R$ ${totalSales.toFixed(2).replace('.', ',')}</p></div>
+                    <div class="stat-card"><h3>Total de Pedidos</h3><p>${state.orders.length}</p></div>
+                    <div class="stat-card"><h3>Itens em Estoque</h3><p>${state.products.reduce((acc, p) => acc + p.stock, 0)}</p></div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <div class="recent-activity">
+                        <h3>Vendas Recentes</h3>
+                        <div class="table-container" style="margin-top: 1rem;">
+                            <table>
+                                <thead><tr><th>Data</th><th>Aluno</th><th>Produto</th><th>Valor</th></tr></thead>
+                                <tbody>
+                                    ${state.orders.slice(-5).reverse().map(order => {
+                                        const student = state.students.find(s => s.id === order.studentId);
+                                        const product = state.products.find(p => p.id === order.productId);
+                                        return `<tr><td>${new Date(order.date).toLocaleDateString()}</td><td>${student ? student.name : 'N/A'}</td><td>${product ? product.name : 'N/A'}</td><td>R$ ${product ? product.price.toFixed(2).replace('.', ',') : '0,00'}</td></tr>`;
+                                    }).join('')}
+                                    ${state.orders.length === 0 ? '<tr><td colspan="4" style="text-align: center;">Nenhum pedido registrado.</td></tr>' : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- VIOLAÇÃO HEURÍSTICA 8: Estética e Design Minimalista (Informação irrelevante/técnica) -->
+                    <div class="system-logs" style="background: #f1f5f9; padding: 1rem; border-radius: 0.75rem; border: 1px solid var(--border);">
+                        <h3 style="font-size: 0.875rem; color: var(--debug); margin-bottom: 0.5rem;">Logs de Depuração do Sistema</h3>
+                        <div style="font-family: monospace; font-size: 0.7rem; color: #64748b;">
+                            <div>[${new Date().toLocaleTimeString()}] DB_QUERY_OK: SELECT * FROM state</div>
+                            <div>[${new Date().toLocaleTimeString()}] MEMORY_USAGE: 24.5MB</div>
+                            <div>[${new Date().toLocaleTimeString()}] SESSION_TOKEN: 7fb90-21a1-9b</div>
+                            <div>[${new Date().toLocaleTimeString()}] API_RESP: 200 OK</div>
+                            <div>[${new Date().toLocaleTimeString()}] EVENT: render_dashboard</div>
+                            <div>[${new Date().toLocaleTimeString()}] UI_REFLOW: 0.04ms</div>
+                            <div style="margin-top: 0.5rem; color: var(--primary); font-weight: bold;">Versão do Build: 2.0.4.15-alpha</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderEntitySection = (entityType) => {
+            const configs = {
+                students: { title: 'Alunos', headers: ['Nome', 'Turma', 'Responsável', 'Telefone'], btnText: 'Novo Aluno', getData: () => state.students, rowTemplate: (item) => `<td>${item.name}</td><td>${item.grade}</td><td>${item.parentName}</td><td>${item.parentPhone}</td>` },
+                sellers: { title: 'Vendedores', headers: ['Nome', 'Telefone'], btnText: 'Novo Vendedor', getData: () => state.sellers, rowTemplate: (item) => `<td>${item.name}</td><td>${item.phone}</td>` },
+                products: { title: 'Produtos', headers: ['Nome', 'Preço', 'Quantidade'], btnText: 'Novo Produto', getData: () => state.products, rowTemplate: (item) => `<td>${item.name}</td><td>R$ ${item.price.toFixed(2).replace('.', ',')}</td><td>${item.stock}</td>` },
+                orders: { title: 'Pedidos', headers: ['Data', 'Aluno', 'Vendedor', 'Produto', 'Total'], btnText: 'Novo Pedido', getData: () => state.orders, rowTemplate: (item) => {
+                    const student = state.students.find(s => s.id === item.studentId);
+                    const seller = state.sellers.find(s => s.id === item.sellerId);
+                    const product = state.products.find(p => p.id === item.productId);
+                    return `<td>${new Date(item.date).toLocaleDateString()}</td><td>${student ? student.name : 'Removido'}</td><td>${seller ? seller.name : 'Removido'}</td><td>${product ? product.name : 'Removido'}</td><td>R$ ${product ? product.price.toFixed(2).replace('.', ',') : '0,00'}</td>`;
+                }},
+                payments: { title: 'Pagamentos', headers: ['Data', 'Aluno', 'Valor'], btnText: 'Registrar Pagamento', getData: () => state.payments, rowTemplate: (item) => {
+                    const student = state.students.find(s => s.id === item.studentId);
+                    return `<td>${new Date(item.date).toLocaleDateString()}</td><td>${student ? student.name : 'Removido'}</td><td>R$ ${item.amount.toFixed(2).replace('.', ',')}</td>`;
+                }}
+            };
+
+            const config = configs[entityType];
+            const contentArea = getEl('content-area');
+            if (!contentArea) return;
+            
+            contentArea.innerHTML = `
+                <div class="section-header">
+                    <h3>Lista de ${config.title}</h3>
+                    <div class="actions">
+                        ${entityType === 'payments' ? '<button class="btn-secondary" onclick="notifyAllParents()" style="margin-right: 1rem;">🔔 Notificar Responsáveis</button>' : ''}
+                        <button class="btn-primary" onclick="showCreateForm('${entityType}')">➕ ${config.btnText}</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr>${config.headers.map(h => `<th>${h}</th>`).join('')}<th>Ações</th></tr></thead>
+                        <tbody>
+                            ${config.getData().length > 0 
+                                ? config.getData().map(item => `
+                                    <tr>
+                                        ${config.rowTemplate(item)}
+                                        <td>
+                                            <button class="btn-edit" onclick="editEntity('${entityType}', '${item.id}')" style="background: none; border: none; cursor: pointer; color: var(--primary); font-size: 1.1rem; margin-right: 0.5rem;" title="Editar">✏️</button>
+                                            <button class="btn-delete" onclick="deleteEntity('${entityType}', '${item.id}')" style="background: none; border: none; cursor: pointer; color: ${entityType === 'students' ? 'var(--success)' : 'var(--danger)'}; font-size: 1.1rem;" title="Excluir">🗑️</button>
+                                        </td>
+                                    </tr>`).join('')
+                                : `<tr><td colspan="${config.headers.length + 1}" style="text-align: center;">Nenhum registro encontrado.</td></tr>`
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        };
+
+        window.deleteEntity = (entityType, id) => {
+            if (confirm('Deseja realmente excluir este registro?')) {
+                state[entityType] = state[entityType].filter(item => item.id !== id);
+                saveState();
+                renderSectionContent(entityType);
+                showNotification('Registro removido com sucesso!');
+            }
+        };
+
+        window.editEntity = (entityType, id) => {
+            const item = state[entityType].find(i => i.id === id);
+            if (item) showCreateForm(entityType, item);
+        };
+
+        window.showCreateForm = (entityType, editItem = null) => {
+            let formHtml = '';
+            let title = editItem ? 'Editar Registro' : 'Novo Registro';
+            
+            if (entityType === 'students') {
+                title = editItem ? 'Editar Aluno' : 'Cadastrar Aluno';
+                formHtml = `<form id="entity-form"><input type="hidden" id="id" value="${editItem ? editItem.id : ''}"><div class="form-group"><label>Nome do Aluno</label><input type="text" id="name" value="${editItem ? editItem.name : ''}" required></div><div class="form-group"><label>Turma</label><input type="text" id="grade" value="${editItem ? editItem.grade : ''}" required></div><div class="form-group"><label>Nome do Responsável</label><input type="text" id="parentName" value="${editItem ? editItem.parentName : ''}" required></div><div class="form-group"><label>Telefone do Responsável</label><input type="tel" id="parentPhone" value="${editItem ? editItem.parentPhone : ''}" required></div><div class="form-actions"><button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button><button type="submit" class="btn-primary">Salvar</button></div></form>`;
+            } else if (entityType === 'sellers') {
+                title = editItem ? 'Editar Vendedor' : 'Cadastrar Vendedor';
+                formHtml = `<form id="entity-form"><input type="hidden" id="id" value="${editItem ? editItem.id : ''}"><div class="form-group"><label>Nome do Vendedor</label><input type="text" id="name" value="${editItem ? editItem.name : ''}" required></div><div class="form-group"><label>Telefone</label><input type="tel" id="phone" value="${editItem ? editItem.phone : ''}" required></div><div class="form-actions"><button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button><button type="submit" class="btn-primary">Salvar</button></div></form>`;
+            } else if (entityType === 'products') {
+                title = editItem ? 'Editar Produto' : 'Cadastrar Produto';
+                // VIOLAÇÃO HEURÍSTICA 5: Prevenção de erros (Permite valores negativos)
+                formHtml = `<form id="entity-form"><input type="hidden" id="id" value="${editItem ? editItem.id : ''}"><div class="form-group"><label>Nome do Produto</label><input type="text" id="name" value="${editItem ? editItem.name : ''}" required></div><div class="form-group"><label>Preço (R$)</label><input type="number" step="0.01" id="price" value="${editItem ? editItem.price : ''}" required></div><div class="form-group"><label>Estoque Disponível</label><input type="number" id="stock" value="${editItem ? editItem.stock : ''}" required></div><div class="form-actions"><button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button><button type="submit" class="btn-primary">Salvar</button></div></form>`;
+            } else if (entityType === 'orders') {
+                title = 'Novo Pedido';
+                // VIOLAÇÃO HEURÍSTICA 6: Reconhecimento em vez de lembrança (Preço não mostrado no dropdown)
+                formHtml = `<form id="entity-form"><div class="form-group"><label>Aluno</label><select id="studentId" required><option value="">Selecione</option>${state.students.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}</select></div><div class="form-group"><label>Vendedor</label><select id="sellerId" required><option value="">Selecione</option>${state.sellers.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}</select></div><div class="form-group"><label>Produto</label><select id="productId" required><option value="">Selecione</option>${state.products.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}</select></div><div class="form-actions"><button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button><button type="submit" class="btn-primary">Registrar</button></div></form>`;
+            } else if (entityType === 'payments') {
+                title = 'Registrar Pagamento';
+                formHtml = `<form id="entity-form"><div class="form-group"><label>Aluno</label><select id="studentId" required><option value="">Selecione</option>${state.students.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}</select></div><div class="form-group"><label>Valor (R$)</label><input type="number" step="0.01" id="amount" required></div><div class="form-actions"><button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button><button type="submit" class="btn-primary">Registrar</button></div></form>`;
+            }
+
+            openModal(title, formHtml);
+            getEl('entity-form').addEventListener('submit', (e) => { 
+                e.preventDefault(); 
+                // VIOLAÇÃO HEURÍSTICA 9: Ajude os usuários a reconhecer, diagnosticar e recuperar-se de erros (Mensagens enigmáticas)
+                if (entityType === 'payments' && getEl('amount').value > 1000) {
+                    alert('CRITICAL_ERR: VAL_EXCEDES_BUF_LIMIT (Code: 0x889)');
+                    return;
+                }
+                saveEntity(entityType, editItem ? editItem.id : null); 
+            });
+        };
+
+        const saveEntity = (entityType, editId = null) => {
+            const data = { id: editId || Date.now().toString(), date: new Date().toISOString() };
+            document.querySelectorAll('#entity-form input, #entity-form select').forEach(input => {
+                if (input.id !== 'id') {
+                    data[input.id] = input.type === 'number' ? parseFloat(input.value) : input.value;
+                }
+            });
+
+            if (editId) {
+                const index = state[entityType].findIndex(i => i.id === editId);
+                state[entityType][index] = data;
+            } else {
+                state[entityType].push(data);
+            }
+            
+            saveState();
+            closeModal();
+            renderSectionContent(entityType);
+            
+            // VIOLAÇÃO HEURÍSTICA 1: Visibilidade do status do sistema (Sem feedback de sucesso para pagamentos)
+            if (entityType !== 'payments') {
+                showNotification(editId ? 'Atualizado com sucesso!' : 'Salvo com sucesso!');
+            }
+        };
+
+        window.showNotification = (message) => {
+            const n = document.createElement('div');
+            n.className = 'notification';
+            n.innerHTML = `<span>✅</span> <span>${message}</span>`;
+            if (!document.querySelector('.notification-area')) {
+                const c = document.createElement('div'); c.className = 'notification-area'; document.body.appendChild(c);
+            }
+            document.querySelector('.notification-area').appendChild(n);
+            setTimeout(() => { n.style.opacity = '0'; setTimeout(() => n.remove(), 300); }, 3000);
+        };
+
+        window.notifyAllParents = () => {
+            showNotification(`Notificações enviadas para ${state.students.length} responsáveis.`);
+        };
+
+        const initApp = () => {
+            const dateEl = getEl('current-date');
+            if (dateEl) dateEl.innerText = new Date().toLocaleDateString('pt-BR', { dateStyle: 'long' });
+            
+            // Attach sidebar event listeners
+            document.querySelectorAll('.sidebar-nav li').forEach(item => {
+                item.addEventListener('click', (e) => { 
+                    e.preventDefault(); 
+                    switchSection(item.dataset.section); 
+                });
+            });
+
+            // Initial switch
+            switchSection('dashboard');
+            console.log('Cantina App Initialized');
+        };
+
+        // Run immediately
+        initApp();
+    </script>
+</body>
 </html>
